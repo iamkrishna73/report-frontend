@@ -8,29 +8,19 @@ export async function getPlanStatus() {
   return await axios.get(`${api_url}/plan-status`);
 }
 
-// export async function fechData(searchRequest) {
-//   console.log('searchrequest', searchRequest);
-
-//   const { planName, planStatus, gender, startDate, endDate } = searchRequest;
-
-//   // Construct the query string
-//   const queryString = `planName=${encodeURIComponent(planName)}&planStatus=${encodeURIComponent(planStatus)}&gender=${encodeURIComponent(gender)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-
-//   // Make the GET request
-//   return await axios.get(`${api_url}/search?${queryString}`);
-// }
-export async function fechData(searchRequest) {
-  console.log('searchrequest', searchRequest);
+export async function getReport(searchRequest) {
+  console.log("Request URL:", `${api_url}/search`);
+  console.log("Request Params:", searchRequest);
 
   // Make the GET request using the params object
-  return await axios.get(`${api_url}/search`, {
-    params: searchRequest,
+  const res = await axios.get(`${api_url}/search`, {
+  //   planName: searchRequest.planName,
+  //   planStatus: searchRequest.planStatus,
+  //   gender: searchRequest.gender,
+  //   startDate: searchRequest.startDate,
+  //   endDate: searchRequest.endDate,
+   params: searchRequest
+
   });
+  return res.data;
 }
-
-
-
-// export async function fechData(searchRequest) {
-//   console.log('searchrequest', searchRequest);
-//   return await axios.get(`${api_url}/search?endDate=${}`, searchRequest);
-// }
