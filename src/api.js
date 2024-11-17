@@ -24,3 +24,8 @@ export async function getReport(searchRequest) {
   });
   return res.data;
 }
+export async function downloadExcel() {
+  return await axios.get(`${api_url}/download`, {
+    responseType: "blob", // Ensures the response is a Blob for file downloads
+  });
+}

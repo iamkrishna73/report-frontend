@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getPlanName, getPlanStatus, getReport } from "../../api";
+import {
+  downloadExcel,
+  getPlanName,
+  getPlanStatus,
+  getReport,
+} from "../../api";
 import TableData from "./TableData";
 
 const SearchForm = () => {
@@ -66,6 +71,23 @@ const SearchForm = () => {
     setTableData([]); // Clear the table data
   };
 
+  const downloadExcelData = async () => {
+    try {
+      const response = await downloadExcel();
+
+      // Create a Blob URL for the response data
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "plans.xlsx"); // Set the file name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Clean up
+    } catch (error) {
+      console.error("Error downloading Excel file:", error);
+    }
+  };
+
   return (
     <>
       <div className="container">
@@ -123,17 +145,27 @@ const SearchForm = () => {
             </div>
           </div>
 
-          <div className="mt-3">
-            <button type="submit" className="btn btn-primary me-2">
-              Search
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
+          <div className="d-flex justify-content-between mt-3">
+            {/* Left-aligned buttons */}
+            <div>
+              <button type="submit" className="btn btn-primary me-2">
+                Search
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+            </div>
+
+            {/* Right-aligned button */}
+            <div>
+              <button onClick={downloadExcelData} className="btn btn-primary">
+                Download Excel
+              </button>
+            </div>
           </div>
         </form>
         <hr />

@@ -52,8 +52,8 @@ const TableData = ({ data }) => {
       columns={columns}
       data={data}
       pagination // Enables pagination
-      paginationPerPage={5} // Show only 5 records per page
-      paginationRowsPerPageOptions={[5, 10, 15, 20]} 
+      paginationPerPage={6} // Show only 5 records per page
+      paginationRowsPerPageOptions={[6, 10, 15, 20]} 
       highlightOnHover // Adds hover effect on rows
       striped // Alternating row colors for better readability
     />
