@@ -17,6 +17,7 @@
     "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.2",
+    "react-toastify": "^10.0.6",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {

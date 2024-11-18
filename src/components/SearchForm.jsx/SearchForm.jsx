@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  downloadExcel,
   getPlanName,
   getPlanStatus,
   getReport,
+  sendExcelByEmail,
+  sendPdfByEmail,
 } from "../../api";
 import TableData from "./TableData";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const SearchForm = () => {
   const {
     register,
     handleSubmit,
-    reset, // Import reset from react-hook-form
+    reset,
     formState: { errors },
   } = useForm();
   const [tableData, setTableData] = useState([]);
@@ -71,25 +74,27 @@ const SearchForm = () => {
     setTableData([]); // Clear the table data
   };
 
-  const downloadExcelData = async () => {
+  const getExcelData = async () => {
     try {
-      const response = await downloadExcel();
-
-      // Create a Blob URL for the response data
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "plans.xlsx"); // Set the file name
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link); // Clean up
+      await sendExcelByEmail();
+      toast.success("Excel report sent successfully!"); // Success toast
     } catch (error) {
-      console.error("Error downloading Excel file:", error);
+      toast.error(`Failed to send Excel report: ${error}`); // Error toast
+    }
+  };
+
+  const getPdfData = async () => {
+    try {
+      await sendPdfByEmail();
+      toast.success("PDF report sent successfully!"); // Success toast
+    } catch (error) {
+      toast.error(`Failed to send PDF report: ${error}`); // Error toast
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <div className="container">
         <form onSubmit={handleSubmit(onSubmit)} className="container">
           <div className="container">
@@ -145,29 +150,31 @@ const SearchForm = () => {
             </div>
           </div>
 
-          <div className="d-flex justify-content-between mt-3">
-            {/* Left-aligned buttons */}
-            <div>
-              <button type="submit" className="btn btn-primary me-2">
-                Search
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={handleReset}
-              >
-                Reset
-              </button>
-            </div>
-
-            {/* Right-aligned button */}
-            <div>
-              <button onClick={downloadExcelData} className="btn btn-primary">
-                Download Excel
-              </button>
-            </div>
+          {/* Left-aligned buttons */}
+          <div>
+            <button type="submit" className="btn btn-primary me-2">
+              Search
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
           </div>
         </form>
+
+        {/* Right-aligned buttons */}
+        <div className="d-flex justify-content-end">
+          <button onClick={getExcelData} className="btn btn-success me-2">
+            Send Excel via Email
+          </button>
+          <button onClick={getPdfData} className="btn btn-danger">
+            Send PDF via Email
+          </button>
+        </div>
+
         <hr />
         {/* Table Data Section */}
         <TableData data={tableData} />
@@ -178,3 +185,4 @@ const SearchForm = () => {
 };
 
 export default SearchForm;
+
